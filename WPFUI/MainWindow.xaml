@@ -20,7 +20,7 @@
         </Grid.ColumnDefinitions>
 
         <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="Menu" Background="AliceBlue"/>
-        <Grid Grid.Row="1" Grid.Column="0" Background="Aquamarine" Grid.ColumnSpan="2" Margin="66,22,708,203" Grid.RowSpan="2">
+        <Grid Grid.Row="1" Grid.Column="0" Background="Aquamarine">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -48,7 +48,7 @@
             <Label Grid.Row="5" Grid.Column="1" Content="{Binding CurrentPlayer.Level}"/>
             <Button Grid.Row="6" Grid.Column="1" Content="Add Xp" Click="ButtonBase_OnClick"></Button>
         </Grid>
-        
+
         <Grid Grid.Row="1" Grid.Column="1" Background="Beige">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
@@ -83,7 +83,8 @@
                     
                     <TextBlock Grid.Row="2"
                                HorizontalAlignment="Center"
-                               Text="{Binding CurrentLocation.Description}"/>
+                               Text="{Binding CurrentLocation.Description}"
+                               TextWrapping="Wrap"/>
                 </Grid>
             </Border>
         </Grid>
