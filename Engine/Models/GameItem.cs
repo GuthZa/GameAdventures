@@ -11,7 +11,7 @@ namespace Engine.Models
         public string Name { get; set; }
         public int ItemTypeID { get; set; }
         public int Price { get; set; }
-        public GameItem(string name, int itemTypeID, int price)
+        public GameItem(int itemTypeID, string name, int price)
         {
             Name = name;
             ItemTypeID = itemTypeID;
@@ -19,7 +19,7 @@ namespace Engine.Models
         }
         public GameItem Clone()
         {
-            return new GameItem(Name, ItemTypeID, Price);
+            return new GameItem(ItemTypeID, Name, Price);
         }
     }
 }
