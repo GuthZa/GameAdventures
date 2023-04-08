@@ -25,6 +25,7 @@
         </Grid.ColumnDefinitions>
 
         <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="Menu" Background="AliceBlue"/>
+        <!-- Player Character -->
         <Grid Grid.Row="1" Grid.Column="0" Background="Aquamarine">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -52,7 +53,7 @@
             <Label Grid.Row="5" Grid.Column="0" Content="Level:"/>
             <Label Grid.Row="5" Grid.Column="1" Content="{Binding CurrentPlayer.Level}"/>
         </Grid>
-
+        <!-- GamePlay -->
         <Grid Grid.Row="1" Grid.Column="1" Background="Beige">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
@@ -63,7 +64,8 @@
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
-
+            
+            <!-- Location Information -->
             <Border Grid.Row="0" Grid.Column="1"
                     BorderBrush="Gainsboro"
                     BorderThickness="1">
@@ -91,7 +93,35 @@
                                TextWrapping="Wrap"/>
                 </Grid>
             </Border>
+            <!-- Monster Information -->
+            <Border Grid.Row="1" Grid.Column="1"
+                    BorderBrush="Gainsboro"
+                    BorderThickness="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0"
+                               HorizontalAlignment="Center"
+                               Height="Auto"
+                               Text="{Binding CurrentMonster.Name}"/>
+                    <Image Grid.Row="1"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Height="125"
+                           Width="125"
+                           Source="{Binding CurrentMonster.ImageName}"/>
+                    <StackPanel Grid.Row="2"
+                                Visibility="{Binding HasMonster, Converter={StaticResource BooleanToVisiblity}}">
+                        <TextBlock>Current Hit Points:</TextBlock>
+                        <TextBlock Text="{Binding CurrentMonster.HitPoints}"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
         </Grid>
+        <!-- Inventory & Quests-->
         <Grid Grid.Row="2" Grid.Column="0" Background="BurlyWood">
             <TabControl>
                 <TabItem Header="Inventory">
@@ -124,6 +154,7 @@
                 </TabItem>
             </TabControl>
         </Grid>
+        <!-- Actions -->
         <Grid Grid.Row="2" Grid.Column="1" Background="Lavender">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>

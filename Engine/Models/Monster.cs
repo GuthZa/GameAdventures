@@ -31,7 +31,8 @@ namespace Engine.Models
             int rewardExperiencePoints, int rewardGold)
         {
             Name = name;
-            ImageName = imageName;
+            //Image Name has an error, not showing monster
+            ImageName = string.Format("pack://application:,,,/Engine;components/Images/Monsters/{0}", imageName);
             MaximumHitPoints = maximumHitPoints;
             HitPoints = hitPoints;
             RewardExperiencePoints = rewardExperiencePoints;
