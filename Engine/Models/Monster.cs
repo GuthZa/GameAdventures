@@ -32,7 +32,7 @@ namespace Engine.Models
         {
             Name = name;
             //Image Name has an error, not showing monster
-            ImageName = string.Format("pack://application:,,,/Engine;components/Images/Monsters/{0}", imageName);
+            ImageName = string.Format("/Engine;component/Images/Monsters/{0}", imageName);
             MaximumHitPoints = maximumHitPoints;
             HitPoints = hitPoints;
             RewardExperiencePoints = rewardExperiencePoints;
