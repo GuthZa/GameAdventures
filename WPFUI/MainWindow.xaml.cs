@@ -1,4 +1,5 @@
 ﻿using Engine.ViewModels;
+using Engine.EventArgs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,7 @@ namespace WPFUI
         {
             InitializeComponent();
             _gameSession = new GameSession();
+            _gameSession.OnMessageRaised += OnGameMessageRaised;
             DataContext = _gameSession;
         }
         private void OnClick_MoveNorth(object sender, RoutedEventArgs e)
@@ -43,6 +45,11 @@ namespace WPFUI
         private void OnClick_MoveSouth(object sender, RoutedEventArgs e)
         {
             _gameSession.MoveSouth();
+        }
+        private void OnGameMessageRaised(object sender, GameMessageEventArgs e)
+        {
+            GameMessage.Document.Blocks.Add(new Paragraph(new Run(e.Message)));
+            GameMessage.ScrollToEnd();
         }
     }
 }

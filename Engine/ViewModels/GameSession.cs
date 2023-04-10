@@ -6,14 +6,17 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Engine.EventArgs;
 
 namespace Engine.ViewModels
 {
     public class GameSession : BaseNotificationClass
     {
+        public event EventHandler<GameMessageEventArgs> OnMessageRaised;
+
+        //Region Properties
         private Location _currentLocation;
         private Monster _currentMonster;
-
         public World CurrentWorld { get; set; }
         public Player CurrentPlayer { get; set; }
         public Location CurrentLocation
@@ -39,23 +42,14 @@ namespace Engine.ViewModels
                 _currentMonster = value;
                 OnPropertyChanged(nameof(CurrentMonster));
                 OnPropertyChanged(nameof(HasMonster));
+                if(CurrentMonster != null)
+                {
+                    RaiseMessage("");
+                    RaiseMessage($"You see a {CurrentMonster.Name} here!");
+                }
             }
         }
-        public GameSession()
-        {
-            CurrentPlayer = new Player
-            {
-                Name = "Dhapius",
-                CharacterClass = "Enchanter",
-                Gold = 10,
-                HitPoints = 10,
-                ExperiencePoints = 0,
-                Level = 0
-            };
-            CurrentWorld = WorldFactory.CreateWorld();
-            CurrentLocation = CurrentWorld.LocationAt(0, 0);
-        }
-
+        public Weapon CurrentWeapon { get; set; }
         public bool HasMonster => CurrentMonster != null;
         public bool HasLocationToNorth
         {
@@ -72,6 +66,22 @@ namespace Engine.ViewModels
         public bool HasLocationToSouth
         {
             get { return CurrentWorld.LocationAt(CurrentLocation.XCoordinate, CurrentLocation.YCoordinate - 1) != null; }
+        }
+        //End Region
+
+        public GameSession()
+        {
+            CurrentPlayer = new Player
+            {
+                Name = "Dhapius",
+                CharacterClass = "Enchanter",
+                Gold = 10,
+                HitPoints = 10,
+                ExperiencePoints = 0,
+                Level = 0
+            };
+            CurrentWorld = WorldFactory.CreateWorld();
+            CurrentLocation = CurrentWorld.LocationAt(0, 0);
         }
 
         public void MoveNorth()
@@ -102,7 +112,7 @@ namespace Engine.ViewModels
                 CurrentLocation = CurrentWorld.LocationAt(CurrentLocation.XCoordinate, CurrentLocation.YCoordinate - 1);
             }
         }
-        public void GivePlayerQuestAtLocation()
+        private void GivePlayerQuestAtLocation()
         {
             foreach(Quest quest in CurrentLocation.QuestsAvailableHere)
             {
@@ -112,9 +122,13 @@ namespace Engine.ViewModels
                 }
             }
         }
-        public void GetMonsterAtLocation()
+        private void GetMonsterAtLocation()
         {
             CurrentMonster = CurrentLocation.GetMonster();
+        }
+        private void RaiseMessage(string message)
+        {
+            OnMessageRaised?.Invoke(this, new GameMessageEventArgs(message));
         }
     }
 }
