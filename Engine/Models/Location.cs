@@ -40,7 +40,7 @@ namespace Engine.Models
             //Total the percentages of all monsters at this location
             int totalChance = MonsterHere.Sum(m => m.ChanceOfEncountering);
             //Select a random number between 1 and the total
-            int randomNumber = RandomNumberGenerator.SimpleNumberBetween(1, totalChance);
+            int randomNumber = RandomNumberGenerator.NumberBetween(1, totalChance);
             //Loop through the monster List
             //Adding the monster's percentage chance of appearing to the runningTotal variable
             //When the random number is lower than the runningTotal

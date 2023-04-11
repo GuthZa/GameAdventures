@@ -30,7 +30,7 @@ namespace Engine
 
         //Simple version to randomize a number
         private static readonly Random _random = new Random();
-        public static int SimpleNumberBetween(int minimumValue, int maximumValue)
+        public static int NumberBetween(int minimumValue, int maximumValue)
         {
             return _random.Next(minimumValue, maximumValue + 1);
         }
