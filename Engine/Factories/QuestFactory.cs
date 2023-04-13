@@ -15,7 +15,7 @@ namespace Engine.Factories
             //Declare the items need to complete the quest and its reward items
             List<ItemQuantity> itemsToComplete = new List<ItemQuantity>();
             List<ItemQuantity> rewardItems = new List<ItemQuantity>();
-            itemsToComplete.Add(new ItemQuantity(1002, 1));
+            itemsToComplete.Add(new ItemQuantity(9002, 1));
             //Create the quest
             _quests.Add(new Quest(1,
                 "Clear the herb garden",
