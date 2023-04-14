@@ -237,6 +237,11 @@
                         Click="OnClick_MoveSouth"
                         Visibility="{Binding HasLocationToSouth, Converter={StaticResource BooleanToVisiblity}}"
                         Content="South"/>
+                <!--TODO add an onclick property to trade, new window -->
+                <Button Grid.Row="1" Grid.Column="1"
+                        Height="25" Width="65" Margin="10" 
+                        Visibility="{Binding HasTrader, Converter={StaticResource BooleanToVisiblity}}"
+                        Content="Trade"/>
             </Grid>
         </Grid>
     </Grid>
