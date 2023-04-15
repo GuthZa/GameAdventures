@@ -19,7 +19,7 @@ namespace Engine.Models
             set
             {
                 _characterClass = value;
-                OnPropertyChanged(nameof(CharacterClass));
+                OnPropertyChanged();
             }
         }
         public int ExperiencePoints
@@ -28,11 +28,11 @@ namespace Engine.Models
             set
             {
                 _experiencePoints = value;
-                OnPropertyChanged(nameof(ExperiencePoints));
+                OnPropertyChanged();
                 SetLevelAndMaximumHitPoints();
             }
         }
-        public ObservableCollection<QuestStatus> Quests { get; set; }
+        public ObservableCollection<QuestStatus> Quests { get; }
         //end Properties region
 
         public event EventHandler OnLeveledUp;
@@ -41,7 +41,7 @@ namespace Engine.Models
             :base(name, maximumHitPoints, currentHitPoints, gold)
         {
             CharacterClass = characterClass;
-            Inventory = new ObservableCollection<GameItem>();
+            ExperiencePoints = experiencePoints;
             Quests = new ObservableCollection<QuestStatus>();
         }
         public bool HasAllTheseItems(List<ItemQuantity> items)
