@@ -14,19 +14,29 @@ namespace Engine.Models
         private int _currentHitPoints;
         private int _maximumHitPoints;
         private int _gold;
+        private int _level;
         public string Name
         {
             get { return _name; }
-            set
+            private set
             {
                 _name = value;
                 OnPropertyChanged(nameof(Name));
             }
         }
+        public int Level
+        {
+            get { return _level; }
+            protected set
+            {
+                _level = value;
+                OnPropertyChanged(nameof(Level));
+            }
+        }
         public int CurrentHitPoints
         {
             get { return _currentHitPoints; }
-            set
+            private set
             {
                 _currentHitPoints = value;
                 OnPropertyChanged(nameof(CurrentHitPoints));
@@ -35,7 +45,7 @@ namespace Engine.Models
         public int MaximumHitPoints
         {
             get { return _maximumHitPoints; }
-            set
+            protected set
             {
                 _maximumHitPoints = value;
                 OnPropertyChanged(nameof(MaximumHitPoints));
@@ -44,7 +54,7 @@ namespace Engine.Models
         public int Gold
         {
             get { return _gold; }
-            set
+            private set
             {
                 _gold = value;
                 OnPropertyChanged(nameof(Gold));
@@ -57,9 +67,10 @@ namespace Engine.Models
         //End region Properties
 
         public event EventHandler OnKilled;
-        protected LivingEntity(string name, int maximumHitPoints, int currentHitPoints, int gold)
+        protected LivingEntity(string name, int maximumHitPoints, int currentHitPoints, int gold, int level = 1)
         {
             Name = name;
+            Level = level;
             MaximumHitPoints = maximumHitPoints;
             CurrentHitPoints = currentHitPoints;
             Gold = gold;
