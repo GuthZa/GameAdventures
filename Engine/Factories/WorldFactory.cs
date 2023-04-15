@@ -37,7 +37,7 @@ namespace Engine.Factories
 
 
             //Town Square
-            newWorld.AddLocation(0, 0, "Town square",
+            newWorld.AddLocation(0, 0, "Town Square",
                 "You see a fountain here.",
                 "TownSquare.png");
 
