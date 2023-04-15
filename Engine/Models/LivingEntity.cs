@@ -9,6 +9,7 @@ namespace Engine.Models
 {
     public abstract class LivingEntity : BaseNotificationClass
     {
+        //Region Properties
         private string _name;
         private int _currentHitPoints;
         private int _maximumHitPoints;
@@ -52,11 +53,44 @@ namespace Engine.Models
         public ObservableCollection<GameItem> Inventory { get; set; }
         public ObservableCollection<GroupedInventoryItem> GroupedInventory { get; set; }
         public List<GameItem> Weapons => Inventory.Where(i => i is Weapon).ToList();
+        public bool IsDead => CurrentHitPoints <= 0;
+        //End region Properties
 
-        protected LivingEntity()
+        public event EventHandler OnKilled;
+        protected LivingEntity(string name, int maximumHitPoints, int currentHitPoints, int gold)
         {
+            Name = name;
+            MaximumHitPoints = maximumHitPoints;
+            CurrentHitPoints = currentHitPoints;
+            Gold = gold;
             Inventory = new ObservableCollection<GameItem>();
             GroupedInventory = new ObservableCollection<GroupedInventoryItem>();
+        }
+
+        public void TakeDamage(int hitPointsOfDamage)
+        {
+            CurrentHitPoints -= hitPointsOfDamage;
+            if(IsDead)
+            {
+                CurrentHitPoints = 0;
+                RaiseOnKilledEvent();
+            }
+        }
+        public void CompletlyHeal()
+        {
+            CurrentHitPoints = MaximumHitPoints;
+        }
+        public void ReceiveGold(int amountOfGold)
+        {
+            Gold += amountOfGold;
+        }
+        public void SpendGold(int amountOfGold)
+        {
+            if(amountOfGold > Gold)
+            {
+                throw new ArgumentOutOfRangeException($"{Name} only has {Gold} gold, and cannot spend {amountOfGold} gold.");
+            }
+            Gold -= amountOfGold;
         }
         public void AddItemToInventory(GameItem item)
         {
@@ -97,5 +131,12 @@ namespace Engine.Models
             }
             OnPropertyChanged(nameof(Weapons));
         }
+
+        //Region Private functions
+        private void RaiseOnKilledEvent()
+        {
+            OnKilled?.Invoke(this, new System.EventArgs());
+        }
+        //End Region private functions
     }
 }
