@@ -49,6 +49,10 @@ namespace WPFUI
         {
             _gameSession.AttackCurrentMonster();
         }
+        private void OnClick_UseCurrentConsumable(object sender, RoutedEventArgs e)
+        {
+            _gameSession.UseCurrentConsumable();
+        }
         private void OnGameMessageRaised(object sender, GameMessageEventArgs e)
         {
             GameMessage.Document.Blocks.Add(new Paragraph(new Run(e.Message)));

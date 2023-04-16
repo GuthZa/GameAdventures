@@ -17,6 +17,7 @@ namespace Engine.Models
         private int _gold;
         private int _level;
         private GameItem _currentWeapon;
+        private GameItem _currentConsumable;
         public string Name
         {
             get { return _name; }
@@ -64,7 +65,7 @@ namespace Engine.Models
         }
         public GameItem CurrentWeapon
         {
-            get { return _currentWeapon;  }
+            get => _currentWeapon; 
             set
             {
                 if(_currentWeapon != null)
@@ -79,9 +80,28 @@ namespace Engine.Models
                 OnPropertyChanged();
             }
         }
+        public GameItem CurrentConsumable
+        {
+            get => _currentConsumable;
+            set
+            {
+                if(_currentConsumable != null)
+                {
+                    _currentConsumable.Action.OnActionPerformed -= RaiseOnActionPerformedEvent;
+                }
+                _currentConsumable = value;
+                if(_currentConsumable != null)
+                {
+                    _currentConsumable.Action.OnActionPerformed += RaiseOnActionPerformedEvent;
+                }
+                OnPropertyChanged();
+            }
+        }
         public ObservableCollection<GameItem> Inventory { get; }
         public ObservableCollection<GroupedInventoryItem> GroupedInventory { get; }
         public List<GameItem> Weapons => Inventory.Where(i => i.Category is GameItem.ItemCategory.Weapon).ToList();
+        public List<GameItem> Consumables => Inventory.Where(i => i.Category == GameItem.ItemCategory.Consumable).ToList();
+        public bool HasConsumable => Consumables.Any();
         public bool IsDead => CurrentHitPoints <= 0;
         //End region Properties
 
@@ -102,6 +122,12 @@ namespace Engine.Models
         {
             CurrentWeapon.PerformAction(this, target);
         }
+        public void UseCurrentConsumable()
+        {
+            //TODO not allow the player to heal above full HP
+            CurrentConsumable.PerformAction(this, this);
+            RemoveItemFromInventory(CurrentConsumable);
+        }
         public void TakeDamage(int hitPointsOfDamage)
         {
             CurrentHitPoints -= hitPointsOfDamage;
@@ -109,6 +135,14 @@ namespace Engine.Models
             {
                 CurrentHitPoints = 0;
                 RaiseOnKilledEvent();
+            }
+        }
+        public void Heal(int hitPointsToHeal)
+        {
+            CurrentHitPoints += hitPointsToHeal;
+            if (CurrentHitPoints > MaximumHitPoints)
+            {
+                CurrentHitPoints = MaximumHitPoints;
             }
         }
         public void CompletlyHeal()
@@ -144,8 +178,9 @@ namespace Engine.Models
 
                 GroupedInventory.First(gi => gi.Item.ItemTypeID == item.ItemTypeID).Quantity++;
             }
-            
             OnPropertyChanged(nameof(Weapons));
+            OnPropertyChanged(nameof(Consumables));
+            OnPropertyChanged(nameof(HasConsumable));
         }
         public void RemoveItemFromInventory(GameItem item)
         {
@@ -167,6 +202,8 @@ namespace Engine.Models
                 }
             }
             OnPropertyChanged(nameof(Weapons));
+            OnPropertyChanged(nameof(Consumables));
+            OnPropertyChanged(nameof(HasConsumable));
         }
 
         //Region Private functions
