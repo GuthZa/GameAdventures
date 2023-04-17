@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Engine.Models;
 
 namespace WPFUI
 {
@@ -53,6 +54,12 @@ namespace WPFUI
         {
             _gameSession.UseCurrentConsumable();
         }
+        private void OnClick_Craft(object sender, RoutedEventArgs e)
+        {
+            Recipe recipe = ((FrameworkElement)sender).DataContext as Recipe;
+            _gameSession.CraftItemUsing(recipe);
+        }
+
         private void OnGameMessageRaised(object sender, GameMessageEventArgs e)
         {
             GameMessage.Document.Blocks.Add(new Paragraph(new Run(e.Message)));
