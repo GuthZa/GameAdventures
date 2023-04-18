@@ -7,6 +7,7 @@ using System.Windows.Input;
 using Engine.Models;
 using Engine.ViewModels;
 using Engine.EventArgs;
+using System.Windows.Controls;
 
 namespace WPFUI
 {
@@ -60,11 +61,14 @@ namespace WPFUI
         }
         private void OnClick_DisplayTradeScreen(object sender, RoutedEventArgs e)
         {
-            TradeScreen tradeScreen = new TradeScreen();
-            tradeScreen.Owner = this;
-            tradeScreen.DataContext = _gameSession;
-            //Locks the main windows from being clicked, until the window is closed
-            tradeScreen.ShowDialog();
+            if (_gameSession.CurrentTrader != null)
+            {
+                TradeScreen tradeScreen = new TradeScreen();
+                tradeScreen.Owner = this;
+                tradeScreen.DataContext = _gameSession;
+                //Locks the main windows from being clicked, until the window is closed
+                tradeScreen.ShowDialog();
+            }
         }
 
         //Key presses
@@ -76,12 +80,30 @@ namespace WPFUI
             _userInputActions.Add(Key.D, () => _gameSession.MoveEast());
             _userInputActions.Add(Key.C, () => _gameSession.UseCurrentConsumable());
             _userInputActions.Add(Key.Z, () => _gameSession.AttackCurrentMonster());
+            _userInputActions.Add(Key.I, () => SetTabFocusTo("InventoryTabItem"));
+            _userInputActions.Add(Key.Q, () => SetTabFocusTo("QuestsTabItem"));
+            _userInputActions.Add(Key.R, () => SetTabFocusTo("RecipesTabItem"));
+            _userInputActions.Add(Key.T, () => OnClick_DisplayTradeScreen(this, new RoutedEventArgs()));
         }
         private void MainWindow_OnKeyDown(object sender, KeyEventArgs e)
         {
             if(_userInputActions.ContainsKey(e.Key))
             {
                 _userInputActions[e.Key].Invoke();
+            }
+        }
+        private void SetTabFocusTo(string tabName)
+        {
+            foreach(object item in PlayerDataTabControl.Items)
+            {
+                if(item is TabItem tabItem)
+                {
+                    if(tabItem.Name == tabName)
+                    {
+                        tabItem.IsSelected = true;
+                        return;
+                    }
+                }
             }
         }
     }
