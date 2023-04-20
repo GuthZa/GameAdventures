@@ -206,7 +206,7 @@ namespace Engine.ViewModels
         }
         public void AttackCurrentMonster()
         {
-            if(CurrentMonster != null )
+            if(CurrentMonster == null)
             {
                 return;
             }
