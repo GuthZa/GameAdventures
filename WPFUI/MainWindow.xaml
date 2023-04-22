@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:Engine.ViewModels;assembly=Engine"
-        d:DataContext="{d:DesignInstance viewModels:GameSession}"
+        d:DataContext="{Binding GameSession}"
         mc:Ignorable="d"
         Title="Awesome Game" Height="768" Width="1024"
         FontSize="11"
@@ -104,7 +104,8 @@
                            VerticalAlignment="Center"
                            Height="125"
                            Width="125"
-                           Source="{Binding CurrentLocation.ImageName}"/>
+                           Source="{Binding CurrentLocation.ImageName, 
+                                            Converter={StaticResource FileToBitmapConverter}}"/>
 
                     <TextBlock Grid.Row="2"
                                HorizontalAlignment="Center"
