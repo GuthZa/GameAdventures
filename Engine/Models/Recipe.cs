@@ -9,7 +9,15 @@ namespace Engine.Models
         public int ID { get; }
         public string Name { get; }
         public List<ItemQuantity> Ingredients { get; } = new List<ItemQuantity>();
-        public List<ItemQuantity> OutPutItems { get; } = new List<ItemQuantity>();
+        public List<ItemQuantity> OutputItems { get; } = new List<ItemQuantity>();
+        public string ToolTipContents =>
+            "Ingredients" + Environment.NewLine +
+            "===========" + Environment.NewLine +
+            string.Join(Environment.NewLine, Ingredients.Select(i => i.QuantityItemDescription)) +
+            Environment.NewLine + Environment.NewLine +
+            "Creates" + Environment.NewLine +
+            "===========" + Environment.NewLine +
+            string.Join(Environment.NewLine, OutputItems.Select(i => i.QuantityItemDescription));
 
         public Recipe(int id, string name)
         {
@@ -25,9 +33,9 @@ namespace Engine.Models
         }
         public void AddOutputItem(int itemID, int quantity)
         {
-            if(!OutPutItems.Any(x => x.ItemID == itemID))
+            if(!OutputItems.Any(x => x.ItemID == itemID))
             {
-                OutPutItems.Add(new ItemQuantity(itemID, quantity));
+                OutputItems.Add(new ItemQuantity(itemID, quantity));
             }
         }
     }

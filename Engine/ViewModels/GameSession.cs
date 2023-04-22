@@ -236,7 +236,7 @@ namespace Engine.ViewModels
         public void CraftItemUsing(Recipe recipe)
         {
             CurrentPlayer.RemoveItemsFromInventory(recipe.Ingredients);
-            foreach(ItemQuantity itemQuantity in recipe.OutPutItems)
+            foreach(ItemQuantity itemQuantity in recipe.OutputItems)
             {
                 for(int i = 0; i < itemQuantity.Quantity; i++)
                 {
