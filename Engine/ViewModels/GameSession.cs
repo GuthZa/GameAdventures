@@ -1,12 +1,9 @@
-﻿using Engine.Factories;
-using Engine.Models;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Engine.EventArgs;
+
+using Engine.Factories;
+using Engine.Models;
 
 namespace Engine.ViewModels
 {
@@ -101,7 +98,7 @@ namespace Engine.ViewModels
         public GameSession()
         {
             CurrentPlayer = new Player("Dhapius", "Enchanter", 0, 10, 10, 25);
-            if (!CurrentPlayer.Weapons.Any())
+            if (!CurrentPlayer.Inventory.Weapons.Any())
             {
                 CurrentPlayer.AddItemToInventory(ItemFactory.CreateGameItem(1001));
             }
@@ -146,16 +143,9 @@ namespace Engine.ViewModels
                 QuestStatus questToComplete = CurrentPlayer.Quests.FirstOrDefault(q => q.PlayerQuest.ID == quest.ID && !q.IsCompleted);
                 if (questToComplete != null)
                 {
-                    if (CurrentPlayer.HasAllTheseItems(quest.ItemsToComplete))
+                    if (CurrentPlayer.Inventory.HasAllTheseItems(quest.ItemsToComplete))
                     {
-                        //Remove the quest completion items from the player's inventory
-                        foreach (ItemQuantity itemQuantity in quest.ItemsToComplete)
-                        {
-                            for (int i = 0; i < itemQuantity.Quantity; i++)
-                            {
-                                CurrentPlayer.RemoveItemFromInventory(CurrentPlayer.Inventory.First(item => item.ItemTypeID == itemQuantity.ItemID));
-                            }
-                        }
+                        CurrentPlayer.RemoveItemsFromInventory(quest.ItemsToComplete);
                         RaiseMessage("");
                         RaiseMessage($"You Completed the '{quest.Name}' quest");
                         //Give the player the rewards
@@ -235,14 +225,17 @@ namespace Engine.ViewModels
         }
         public void CraftItemUsing(Recipe recipe)
         {
-            CurrentPlayer.RemoveItemsFromInventory(recipe.Ingredients);
-            foreach(ItemQuantity itemQuantity in recipe.OutputItems)
+            if (CurrentPlayer.Inventory.HasAllTheseItems(recipe.Ingredients))
             {
-                for(int i = 0; i < itemQuantity.Quantity; i++)
+                CurrentPlayer.RemoveItemsFromInventory(recipe.Ingredients);
+                foreach (ItemQuantity itemQuantity in recipe.OutputItems)
                 {
-                    GameItem outputItem = ItemFactory.CreateGameItem(itemQuantity.ItemID);
-                    CurrentPlayer.AddItemToInventory(outputItem);
-                    RaiseMessage($"You craft 1 {outputItem.Name}");
+                    for (int i = 0; i < itemQuantity.Quantity; i++)
+                    {
+                        GameItem outputItem = ItemFactory.CreateGameItem(itemQuantity.ItemID);
+                        CurrentPlayer.AddItemToInventory(outputItem);
+                        RaiseMessage($"You craft 1 {outputItem.Name}");
+                    }
                 }
             }
         }
@@ -280,7 +273,7 @@ namespace Engine.ViewModels
             RaiseMessage($"You receive {CurrentMonster.RewardExperiencePoints} experience points.");
             CurrentPlayer.ReceiveGold(CurrentMonster.Gold);
             RaiseMessage($"You receive {CurrentMonster.Gold} gold.");
-            foreach (GameItem gameItem in CurrentMonster.Inventory)
+            foreach (GameItem gameItem in CurrentMonster.Inventory.Items)
             {
                 CurrentPlayer.AddItemToInventory(gameItem);
                 RaiseMessage($"You receive one {gameItem.Name}.");

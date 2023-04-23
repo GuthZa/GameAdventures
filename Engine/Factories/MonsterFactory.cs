@@ -6,6 +6,7 @@ using System.Linq;
 using Engine.Models;
 using Engine.Shared;
 using System.Collections.Generic;
+using Engine.Services;
 
 namespace Engine.Factories
 {
@@ -63,7 +64,7 @@ namespace Engine.Factories
         {
             if(RandomNumberGenerator.NumberBetween(1, 100) <= percentage)
             {
-                monster.Inventory.Add(ItemFactory.CreateGameItem(itemID));
+                monster.Inventory.AddItemFromFactory(itemID);
             }
         }
     }
